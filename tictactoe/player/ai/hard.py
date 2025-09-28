@@ -1,6 +1,5 @@
 import re
 
-from tictactoe import GRID_SIZE
 from tictactoe import VALID_LETTERS
 from tictactoe.player.ai.medium import MediumAIPlayer
 
@@ -12,13 +11,12 @@ class HardAIPlayer(MediumAIPlayer):
 
     def _get_move(self, grid: list[list[str]]) -> tuple[int]:
         # First determine if I can win this turn
-        move = self._get_winning_move(self._letter, grid)
+        move = self._get_winning_move(self.letter, grid)
         if move is not None:
             return move
         
         # Then determine if opponent can win their next turn, and if so, block it
-        opponent_letter = VALID_LETTERS[int(not bool(VALID_LETTERS.index(self._letter)))]
-        move = self._get_winning_move(opponent_letter, grid)
+        move = self._get_winning_move(None, grid)
         if move is not None:
             return move
         
@@ -37,18 +35,18 @@ class HardAIPlayer(MediumAIPlayer):
                 # Second move, try to pick a corner in the same row or column
                 # as our first move, but not a row or column that our opponent
                 # picked
-                if not grid[0][GRID_SIZE - 1] and not grid[0][1]:
-                    return GRID_SIZE - 1, 0
-                return 0, GRID_SIZE - 1
+                if not grid[0][len(grid) - 1] and not grid[0][1]:
+                    return len(grid) - 1, 0
+                return 0, len(grid) - 1
             elif count == 2:
                 # Third move, try to pick a corner in the same row or column
                 # as our first move
-                if not grid[0][GRID_SIZE - 1]:
-                    return GRID_SIZE - 1, 0
-                elif not grid[GRID_SIZE - 1][0]:
-                    return 0, GRID_SIZE - 1
+                if not grid[0][len(grid) - 1]:
+                    return len(grid) - 1, 0
+                elif not grid[len(grid) - 1][0]:
+                    return 0, len(grid) - 1
                 # Otherwise, pick the last remaining corner
-                return grid[GRID_SIZE - 1][GRID_SIZE - 1]
+                return grid[len(grid) - 1][len(grid) - 1]
         else:
             # Second player strategy, more defensive
             if count == 0:

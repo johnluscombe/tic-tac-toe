@@ -9,7 +9,7 @@ class EasyAIPlayer(AIPlayer):
     """
 
     def _get_move(self, grid: list[list[str]]) -> tuple[int]:
-        self._get_first_available_move(grid)
+        return self._get_first_available_move(grid)
     
     def _get_first_available_move(self, grid: list[list[str]]) -> tuple[int]:
         """

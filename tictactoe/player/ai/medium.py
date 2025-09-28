@@ -1,7 +1,5 @@
 import re
 
-from tictactoe import GRID_SIZE
-from tictactoe import VALID_LETTERS
 from tictactoe.player.ai.easy import EasyAIPlayer
 
 
@@ -21,8 +19,7 @@ class MediumAIPlayer(EasyAIPlayer):
             return move
         
         # Then determine if opponent can win their next turn, and if so, block it
-        opponent_letter = VALID_LETTERS[int(not bool(VALID_LETTERS.index(self.letter)))]
-        move = self._get_winning_move(opponent_letter, grid)
+        move = self._get_winning_move(None, grid)
         if move is not None:
             return move
 
@@ -45,29 +42,57 @@ class MediumAIPlayer(EasyAIPlayer):
         # Check rows
         for row_num in range(len(grid)):
             row = grid[row_num]
-            if row.count(letter) == GRID_SIZE - 1 and row.count("") == 1:
-                return row.index(""), row_num
+            letter_counts = self._get_letter_counts(row)
+            for l in letter_counts:
+                if l == letter and letter_counts[l] == len(grid) - 1 and row.count("") == 1:
+                    return row.index(""), row_num
         
         # Check cols
         for col_num in range(len(grid)):
             col = list(map(lambda row: row[col_num], grid))
-            if col.count(letter) == GRID_SIZE - 1 and col.count("") == 1:
-                return col_num, col.index("")
+            letter_counts = self._get_letter_counts(col)
+            for l in letter_counts:
+                if l == letter and letter_counts[l] == len(grid) - 1 and col.count("") == 1:
+                    return col_num, col.index("")
         
         # Check diagonal 1
         diag = []
         for i in range(len(grid)):
             diag.append(grid[i][i])
-        if diag.count(letter) == GRID_SIZE - 1 and diag.count("") == 1:
-            idx = diag.index("")
-            return idx, idx
+        letter_counts = self._get_letter_counts(diag)
+        for l in letter_counts:
+            if l == letter and letter_counts[l] == len(grid) - 1 and diag.count("") == 1:
+                idx = diag.index("")
+                return idx, idx
         
         # Check diagonal 2
         diag = []
         for i in range(len(grid)):
-            diag.append(grid[GRID_SIZE - i - 1][i])
-        if diag.count(letter) == GRID_SIZE - 1 and diag.count("") == 1:
-            idx = diag.index("")
-            return GRID_SIZE - idx - 1, idx
+            diag.append(grid[len(grid) - i - 1][i])
+        letter_counts = self._get_letter_counts(diag)
+        for l in letter_counts:
+            if l == letter and letter_counts[l] == len(grid) - 1 and diag.count("") == 1:
+                idx = diag.index("")
+                return len(grid) - idx - 1, idx
         
         return None
+    
+    def _get_letter_counts(self, lst: list[str]) -> dict[str, int]:
+        """
+        Returns the count of each letter in the given list, ignoring empty
+        strings.
+
+        Arguments:
+            lst (list[str]): List to use to count letters.
+        
+        Returns:
+            dict
+        """
+
+        d = {}
+        for letter in lst:
+            if letter not in d:
+                d[letter] = 0
+            d[letter] += 1
+        
+        return d

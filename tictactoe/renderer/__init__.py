@@ -13,9 +13,9 @@ class Renderer(ABC):
         self._tic_tac_toe = tic_tac_toe
 
     @abstractmethod
-    def render(self):
+    def mainloop(self):
         """
-        Renders the current state of the game.
+        Launches the application and runs it until the user exits.
         """
 
         pass
