@@ -1,6 +1,3 @@
-import re
-
-from tictactoe import VALID_LETTERS
 from tictactoe.player.ai.medium import MediumAIPlayer
 
 

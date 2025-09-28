@@ -3,7 +3,7 @@ import unittest
 from tictactoe import TicTacToe
 from tictactoe.player.ai.easy import EasyAIPlayer
 from tictactoe.player.ai.medium import MediumAIPlayer
-# from tictactoe.player.ai.medium import HardAIPlayer
+from tictactoe.player.ai.hard import HardAIPlayer
 from tictactoe.player.manual import ManualPlayer
 
 
@@ -40,6 +40,63 @@ class TestAIs(unittest.TestCase):
     
     def test_medium_picks_opponent_winning_move_if_available(self):
         self._tic_tac_toe.add_player(MediumAIPlayer, "O", "AI")
+
+        # Set up for both players to be able to win
+        self._tic_tac_toe.place(0, 0)
+        self._tic_tac_toe.place(1, 0)
+        self._tic_tac_toe.place(0, 1)
+        self._tic_tac_toe.place(1, 1)
+
+        # Place X in the bottom-right corner to keep it out of the way
+        self._tic_tac_toe.place(2, 2)
+
+        grid = self._tic_tac_toe.grid
+        ai = self._tic_tac_toe.players[1]
+        self.assertEqual(ai.get_move(grid), (1, 2))
+    
+    def test_medium_picks_first_available_spot_if_last_option(self):
+        self._tic_tac_toe.add_player(MediumAIPlayer, "O", "AI")
+
+        self._tic_tac_toe.place(0, 0)
+
+        grid = self._tic_tac_toe.grid
+        ai = self._tic_tac_toe.players[1]
+        self.assertEqual(ai.get_move(grid), (1, 0))
+    
+    def test_hard_picks_self_winning_move_if_available(self):
+        self._tic_tac_toe.add_player(HardAIPlayer, "O", "AI")
+
+        # Set up for both players to be able to win
+        self._tic_tac_toe.place(0, 0)
+        self._tic_tac_toe.place(1, 0)
+        self._tic_tac_toe.place(0, 1)
+        self._tic_tac_toe.place(1, 1)
+
+        # Place X in the bottom-right corner to keep it out of the way
+        self._tic_tac_toe.place(2, 2)
+
+        grid = self._tic_tac_toe.grid
+        ai = self._tic_tac_toe.players[1]
+        self.assertEqual(ai.get_move(grid), (1, 2))
+    
+    def test_hard_picks_opponent_winning_move_if_available(self):
+        self._tic_tac_toe.add_player(HardAIPlayer, "O", "AI")
+
+        # Set up for both players to be able to win
+        self._tic_tac_toe.place(0, 0)
+        self._tic_tac_toe.place(1, 0)
+        self._tic_tac_toe.place(0, 1)
+        self._tic_tac_toe.place(1, 1)
+
+        # Place X in the bottom-right corner to keep it out of the way
+        self._tic_tac_toe.place(2, 2)
+
+        grid = self._tic_tac_toe.grid
+        ai = self._tic_tac_toe.players[1]
+        self.assertEqual(ai.get_move(grid), (1, 2))
+    
+    def test_hard_first_player_first_move_picks_corner(self):
+        self._tic_tac_toe.add_player(HardAIPlayer, "O", "AI")
 
         # Set up for both players to be able to win
         self._tic_tac_toe.place(0, 0)
